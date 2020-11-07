@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<script>
+	function getWeather() {
+			request = new XMLHttpRequest();
+			console.log("1 - request object created");
+ 
+		request.open("GET", "https://community-open-weather-map.p.rapidapi.com/weather?q=London%2Cuk&lat=0&lon=0&id=2172797&lang=null&units=%22metric%22%20or%20%22imperial%22&mode=xml%2C%20html", true)
+		request.setRequestHeader("x-rapidapi-key", "57871242a9msh19740dde834da74p11e4eajsne931b0243d66");
+		request.setRequestHeader("x-rapidapi-host", "community-open-weather-map.p.rapidapi.com");
+
+			console.log("2 - opened request file");
+
+			request.onreadystatechange = function() {
+				console.log("3 - readystatechange event fired.");
+ 
+				if (request.readyState == 4 && request.status == 200) {
+					console.log("5 - response received");
+					alert(this.responseText);
+					var weather = JSON.parse(this.responseText);
+					
+					document.getElementById("data").innerHTML ="current humidity in london: " + weather["main"]["humidity"] + "%" + "<br>current minimum temperature in london: " + weather["main"]["temp_min"] + "K" + "<br>current maximum temperature in london: " + weather["main"]["temp_max"] + "K" + "<br>current temperature in london: " + weather["main"]["temp"] + "K" + "<br>currently feels like: " + weather["main"]["feels_like"] + "K"; 
+					
+				}
+				else if (request.readyState == 4 && request.status != 200) {
+
+					document.getElementById("data").innerHTML = "Something is wrong!  Check the logs to see where this went off the rails";
+
+				}
+
+				else if (request.readyState == 3) {
+
+					document.getElementById("data").innerHTML = "Too soon!  Try again";
+
+				}
+
+			}
+			request.send();
+			console.log("4 - Request sent");
+		}
+</script>
+<body onload="getWeather()">
+	<div id="data">Loading...</div>
+	<div> 1. The API I selected is the Open Weather Map API. It has weather data for places around the world. </div>
+	<div> 2. <a href = "https://rapidapi.com/community/api/open-weather-map/endpoints">https://rapidapi.com/community/api/open-weather-map/endpoints</a> is the website I found it from</div>
+	<div> 3. The options I used for my API request was just the current weather option. </div>
+	<div> 4. One application for this data is to use it to make a weather website where the temperature of a place is shown along with all other smaller stats like humidity, min/max temp, etc. Another application for this API could be to do data analysis on temperature over a time period in a place and see how it has changed compared to different years. 
+	</div>
+</body>
+</html>
